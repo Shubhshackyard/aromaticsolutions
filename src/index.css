@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-stone-50 text-slate-700 font-sans antialiased dark:bg-slate-950 dark:text-slate-200;
+  }
+  h1, h2, h3, h4, h5 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .prose-custom {
+    @apply space-y-5 text-slate-600 dark:text-slate-300 leading-relaxed;
+  }
+  .prose-custom h2 {
+    @apply font-serif text-2xl font-bold text-forest-900 dark:text-white mt-10 mb-3;
+  }
+  .prose-custom h3 {
+    @apply font-serif text-xl font-semibold text-forest-900 dark:text-white mt-8 mb-2;
+  }
+  .prose-custom p {
+    @apply text-base leading-relaxed;
+  }
+  .prose-custom strong {
+    @apply font-semibold text-slate-800 dark:text-slate-100;
+  }
+  .prose-custom em {
+    @apply italic;
+  }
+  .prose-custom ul {
+    @apply list-disc pl-6 space-y-2;
+  }
+  .prose-custom ol {
+    @apply list-decimal pl-6 space-y-2;
+  }
+  .prose-custom li {
+    @apply leading-relaxed text-slate-600 dark:text-slate-300;
+  }
+  .prose-custom a {
+    @apply text-forest-700 dark:text-amber-400 underline underline-offset-2 hover:text-forest-900 dark:hover:text-amber-300 transition-colors;
+  }
+  .prose-custom blockquote {
+    @apply border-l-4 border-amber-400 pl-5 italic text-slate-700 dark:text-slate-300 my-6;
+  }
+  .prose-custom hr {
+    @apply border-stone-200 dark:border-slate-700 my-8;
+  }
+  .prose-custom code {
+    @apply font-mono text-sm bg-stone-100 dark:bg-slate-800 text-forest-800 dark:text-amber-300 px-1.5 py-0.5 rounded;
+  }
+  .prose-custom pre {
+    @apply bg-slate-900 dark:bg-slate-950 rounded-xl p-5 overflow-x-auto my-6;
+  }
+  .prose-custom pre code {
+    @apply bg-transparent text-slate-200 dark:text-slate-200 p-0;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/30;
+  }
+  .glass-dark {
+    @apply bg-forest-900/80 backdrop-blur-md border border-forest-700/40;
+  }
+  .text-gold {
+    color: #d4af37;
+  }
+  .border-gold {
+    border-color: #d4af37;
+  }
+  .bg-gold {
+    background-color: #d4af37;
+  }
+  .hover\:bg-gold:hover {
+    background-color: #d4af37;
+  }
+}

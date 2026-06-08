@@ -1,0 +1,88 @@
+backend:
+  name: git-gateway
+  branch: main
+
+local_backend: true
+
+media_folder: public/images/blog
+public_folder: /images/blog
+
+site_url: https://www.aromaticsolutions.co.in
+logo_url: https://www.aromaticsolutions.co.in/favicon.ico
+
+collections:
+  - name: "blog"
+    label: "Blog Articles"
+    label_singular: "Blog Article"
+    folder: "content/blog"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    identifier_field: title
+    preview_path: "blog/{{slug}}"
+    summary: "{{title}} — {{category}} · {{date}}"
+    sortable_fields: ["date", "title", "category"]
+    fields:
+      - label: "Title"
+        name: "title"
+        widget: "string"
+        hint: "Article headline shown on cards and the detail page."
+
+      - label: "Slug"
+        name: "slug"
+        widget: "string"
+        hint: "URL identifier, e.g. my-article-name (lowercase, hyphens only). Auto-generated from title when left blank."
+
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Science", value: "Science" }
+          - { label: "Sourcing", value: "Sourcing" }
+          - { label: "Industry Trends", value: "Industry Trends" }
+
+      - label: "Excerpt"
+        name: "excerpt"
+        widget: "text"
+        hint: "Short description shown on blog cards (1–2 sentences)."
+
+      - label: "Author"
+        name: "author"
+        widget: "string"
+
+      - label: "Author Role"
+        name: "authorRole"
+        widget: "string"
+        hint: "e.g. Lead Research Scientist"
+
+      - label: "Publish Date"
+        name: "date"
+        widget: "datetime"
+        format: "MMMM D, YYYY"
+        date_format: "MMMM D, YYYY"
+        time_format: false
+
+      - label: "Read Time"
+        name: "readTime"
+        widget: "string"
+        default: "5 min read"
+        hint: "e.g. '7 min read'"
+
+      - label: "Cover Image"
+        name: "coverImage"
+        widget: "image"
+        hint: "Recommended: 1600×900px, landscape. Can be a URL or uploaded file."
+        media_library:
+          config:
+            multiple: false
+
+      - label: "Featured Article"
+        name: "featured"
+        widget: "boolean"
+        default: false
+        hint: "Show this article in the large featured slot on the Blog page. Only one should be featured at a time."
+
+      - label: "Body"
+        name: "body"
+        widget: "markdown"
+        hint: "Full article content. Use ## for section headings."

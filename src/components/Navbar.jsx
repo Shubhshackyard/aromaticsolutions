@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Menu, X, Leaf, ChevronRight, Sun, Moon } from 'lucide-react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, Leaf, ChevronRight, Sun, Moon, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 
@@ -15,6 +15,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { dark, toggle } = useTheme();
 
   useEffect(() => {
@@ -22,6 +23,33 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      document.body.style.overflow = '';
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isOpen]);
 
   const handleSolutionsClick = (e, to) => {
     if (to === '/#solutions') {
@@ -37,6 +65,9 @@ export default function Navbar() {
       }
     }
   };
+
+  const mobileLinkBase =
+    'group flex items-center justify-between rounded-[22px] px-4 py-4 text-[15px] font-medium transition-all duration-300';
 
   return (
     <header
@@ -165,15 +196,20 @@ export default function Navbar() {
           </motion.button>
 
           <button
-            className={`md:hidden p-2 rounded-lg transition-colors ${
+            className={`md:hidden relative inline-flex h-11 w-11 items-center justify-center rounded-2xl border transition-all duration-300 ${
               scrolled
-                ? 'text-slate-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800'
-                : 'text-white hover:bg-white/10'
+                ? 'border-white/70 bg-white/55 text-slate-700 shadow-[0_12px_30px_rgba(15,23,42,0.12)] backdrop-blur-2xl dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-200'
+                : 'border-white/20 bg-white/10 text-white shadow-[0_10px_24px_rgba(15,23,42,0.16)] backdrop-blur-xl'
             }`}
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
           >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            <span className="absolute inset-[1px] rounded-[15px] bg-gradient-to-b from-white/40 to-white/5 dark:from-white/10 dark:to-transparent" />
+            <span className="relative">
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </span>
           </button>
         </div>
       </nav>
@@ -182,55 +218,96 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ type: 'tween', duration: 0.25 }}
-            className="fixed inset-y-0 right-0 w-72 bg-white dark:bg-slate-900 shadow-2xl z-40 flex flex-col p-6 md:hidden border-l border-stone-100 dark:border-slate-700"
+            id="mobile-menu"
+            initial={{ opacity: 0, x: 32, scale: 0.98 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 36, scale: 0.98 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 30 }}
+            className="fixed inset-y-3 right-3 z-40 flex w-[min(22rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-[32px] border border-white/45 bg-white/55 p-3 shadow-[0_28px_80px_rgba(15,23,42,0.32)] backdrop-blur-3xl backdrop-saturate-150 dark:border-white/10 dark:bg-slate-950/70 md:hidden"
           >
-            <div className="flex items-center justify-between mb-8">
-              <span className="font-serif font-bold text-forest-900 dark:text-white text-lg">Menu</span>
-              <button onClick={() => setIsOpen(false)} aria-label="Close menu">
-                <X className="w-5 h-5 text-slate-600 dark:text-slate-300" />
-              </button>
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.75),transparent_45%),linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.03))] dark:bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_40%),linear-gradient(180deg,rgba(255,255,255,0.08),rgba(15,23,42,0.02))]" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/80 dark:bg-white/15" />
+
+            <div className="relative flex h-full flex-col rounded-[28px] border border-white/40 bg-white/20 p-4 dark:border-white/10 dark:bg-white/5">
+              <div className="flex items-start justify-between gap-4 border-b border-slate-900/8 pb-4 dark:border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/50 bg-white/45 text-amber-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-amber-300">
+                    <Leaf className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-serif text-lg font-semibold tracking-tight text-slate-900 dark:text-white">Aromatic Menu</p>
+                    <p className="flex items-center gap-1 text-[11px] uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
+                      <Sparkles className="h-3.5 w-3.5" />
+                      Refined navigation
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  aria-label="Close menu"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/50 bg-white/45 text-slate-600 transition-all duration-300 hover:bg-white/70 dark:border-white/10 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/15"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <nav className="mt-4 flex flex-1 flex-col gap-2">
+                {navLinks.map((link) => (
+                  link.to === '/#solutions' ? (
+                    <a
+                      key={link.label}
+                      href={link.to}
+                      onClick={(e) => handleSolutionsClick(e, link.to)}
+                      className={`${mobileLinkBase} text-slate-700 hover:bg-white/55 hover:text-forest-900 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white`}
+                    >
+                      <span>{link.label}</span>
+                      <ChevronRight className="h-4 w-4 text-slate-400 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-amber-500 dark:text-slate-500 dark:group-hover:text-amber-300" />
+                    </a>
+                  ) : (
+                    <NavLink
+                      key={link.label}
+                      to={link.to}
+                      onClick={() => setIsOpen(false)}
+                      className={({ isActive }) =>
+                        `${mobileLinkBase} ${
+                          isActive
+                            ? 'bg-white/70 text-forest-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.85),0_18px_35px_rgba(148,163,184,0.18)] dark:bg-white/10 dark:text-amber-300'
+                            : 'text-slate-700 hover:bg-white/55 hover:text-forest-900 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white'
+                        }`
+                      }
+                    >
+                      {({ isActive }) => (
+                        <>
+                          <span>{link.label}</span>
+                          <ChevronRight
+                            className={`h-4 w-4 transition-transform duration-300 ${
+                              isActive
+                                ? 'translate-x-0.5 text-amber-500 dark:text-amber-300'
+                                : 'text-slate-400 group-hover:translate-x-0.5 group-hover:text-amber-500 dark:text-slate-500 dark:group-hover:text-amber-300'
+                            }`}
+                          />
+                        </>
+                      )}
+                    </NavLink>
+                  )
+                ))}
+              </nav>
+
+              <div className="mt-4 rounded-[26px] border border-white/45 bg-white/40 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] dark:border-white/10 dark:bg-white/5">
+                <p className="text-xs font-medium uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Need sourcing support?</p>
+                <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  Connect with our team for formulations, bulk orders, and tailored aromatic blends.
+                </p>
+                <Link
+                  to="/contact?inquiry=Bulk+Wholesale+Purchase"
+                  onClick={() => setIsOpen(false)}
+                  className="mt-4 flex items-center justify-center gap-2 rounded-full border border-forest-800/10 bg-forest-900 px-4 py-3 text-sm font-medium text-white shadow-[0_16px_30px_rgba(17,24,39,0.22)] transition-all duration-300 hover:bg-forest-700 dark:border-white/10 dark:bg-amber-400 dark:text-slate-950 dark:hover:bg-amber-300"
+                >
+                  Request a Quote
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
-            <nav className="flex flex-col gap-1 flex-1">
-              {navLinks.map((link) => (
-                link.to === '/#solutions' ? (
-                  <a
-                    key={link.label}
-                    href={link.to}
-                    onClick={(e) => handleSolutionsClick(e, link.to)}
-                    className="px-4 py-3 text-base font-medium text-slate-700 dark:text-slate-300 hover:text-forest-800 dark:hover:text-white hover:bg-forest-50 dark:hover:bg-slate-800 rounded-xl transition-all"
-                  >
-                    {link.label}
-                  </a>
-                ) : (
-                  <NavLink
-                    key={link.label}
-                    to={link.to}
-                    onClick={() => setIsOpen(false)}
-                    className={({ isActive }) =>
-                      `px-4 py-3 text-base font-medium rounded-xl transition-all ${
-                        isActive
-                          ? 'text-forest-800 dark:text-amber-400 bg-forest-50 dark:bg-slate-800 font-semibold'
-                          : 'text-slate-700 dark:text-slate-300 hover:text-forest-800 dark:hover:text-white hover:bg-forest-50 dark:hover:bg-slate-800'
-                      }`
-                    }
-                  >
-                    {link.label}
-                  </NavLink>
-                )
-              ))}
-            </nav>
-            <Link
-              to="/contact?inquiry=Bulk+Wholesale+Purchase"
-              onClick={() => setIsOpen(false)}
-              className="mt-4 flex items-center justify-center gap-2 px-4 py-3 bg-forest-900 hover:bg-forest-700 text-white font-medium rounded-full transition-all"
-            >
-              Request a Quote
-              <ChevronRight className="w-4 h-4" />
-            </Link>
           </motion.div>
         )}
       </AnimatePresence>
@@ -242,7 +319,8 @@ export default function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 z-30 md:hidden"
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-30 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.18),transparent_20%),rgba(15,23,42,0.48)] backdrop-blur-sm md:hidden"
             onClick={() => setIsOpen(false)}
           />
         )}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Send, CheckCircle, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { postFunction } from '../lib/functionsApi';
 
 export default function Newsletter() {
   const [email, setEmail] = useState('');
@@ -17,13 +18,7 @@ export default function Newsletter() {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('/.netlify/functions/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Subscription failed.');
+      await postFunction('subscribe', { email });
       setSubmitted(true);
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');

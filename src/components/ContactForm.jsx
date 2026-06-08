@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, Send, AlertCircle, Loader2 } from 'lucide-react';
+import { postFunction } from '../lib/functionsApi';
 
 const inquiryTypes = [
   'Bulk Wholesale Purchase',
@@ -68,13 +69,7 @@ export default function ContactForm({ defaultInquiry = '' }) {
     setLoading(true);
     setServerError('');
     try {
-      const res = await fetch('/.netlify/functions/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Submission failed.');
+      await postFunction('contact', form);
       setSubmitted(true);
     } catch (err) {
       setServerError(err.message || 'Something went wrong. Please try again.');

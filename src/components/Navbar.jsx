@@ -67,7 +67,7 @@ export default function Navbar() {
   };
 
   const mobileLinkBase =
-    'group flex items-center justify-between rounded-[22px] px-4 py-4 text-[15px] font-medium transition-all duration-300';
+    'group flex items-center justify-between rounded-2xl px-4 py-3.5 text-[15px] font-medium transition-all duration-300';
 
   return (
     <header
@@ -82,23 +82,23 @@ export default function Navbar() {
         scrolled ? 'bg-white/80' : 'bg-white/20'
       }`} />
 
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[4.5rem] md:min-h-[5rem] py-2.5 md:py-3 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group" aria-label="Aromatic Solutions Home">
-          <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all duration-300 ${
+        <Link to="/" className="flex items-center gap-2.5 md:gap-3 group min-w-0 max-w-[calc(100%-7rem)]" aria-label="Aromatic Solutions Home">
+          <div className={`w-10 h-10 md:w-11 md:h-11 shrink-0 rounded-full flex items-center justify-center shadow-md transition-all duration-300 ${
             scrolled
               ? 'bg-forest-900 group-hover:bg-forest-700'
               : 'bg-white/15 border border-white/25 group-hover:bg-white/25'
           }`}>
             <Leaf className="w-5 h-5 text-amber-400" />
           </div>
-          <div className="leading-none">
-            <span className={`block font-serif font-bold text-base tracking-tight transition-colors duration-300 ${
+          <div className="flex min-w-0 flex-col justify-center leading-[0.92] md:leading-[0.95] pt-0.5">
+            <span className={`block truncate font-serif font-bold text-[1rem] sm:text-[1.15rem] md:text-[1.7rem] tracking-[-0.04em] transition-colors duration-300 ${
               scrolled ? 'text-forest-900 dark:text-white' : 'text-white'
             }`}>
               Aromatic
             </span>
-            <span className="block text-[10px] font-sans font-medium text-amber-400 tracking-widest uppercase">
+            <span className="mt-1 block truncate text-[0.58rem] sm:text-[0.62rem] md:text-[0.72rem] font-sans font-semibold text-amber-400 tracking-[0.18em] sm:tracking-[0.22em] md:tracking-[0.28em] uppercase">
               Solutions
             </span>
           </div>
@@ -143,7 +143,7 @@ export default function Navbar() {
         </div>
 
         {/* CTA + Dark Mode Toggle + Mobile Toggle */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 self-center">
           <Link
             to="/contact?inquiry=Bulk+Wholesale+Purchase"
             className={`hidden md:inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 shadow-sm hover:shadow-md ${
@@ -223,45 +223,45 @@ export default function Navbar() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 36, scale: 0.98 }}
             transition={{ type: 'spring', stiffness: 280, damping: 30 }}
-            className="fixed inset-y-3 right-3 z-40 flex w-[min(22rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-[32px] border border-white/45 bg-white/55 p-3 shadow-[0_28px_80px_rgba(15,23,42,0.32)] backdrop-blur-3xl backdrop-saturate-150 dark:border-white/10 dark:bg-slate-950/70 md:hidden"
+            className="absolute right-3 top-[calc(100%+0.65rem)] z-40 flex max-h-[calc(100dvh-6rem)] w-[min(21rem,calc(100vw-1.5rem))] min-h-[22rem] flex-col overflow-hidden rounded-[28px] border border-amber-300/18 bg-forest-950/75 p-2.5 shadow-[0_22px_60px_rgba(5,20,12,0.5)] backdrop-blur-2xl backdrop-saturate-150 dark:border-amber-200/12 dark:bg-forest-950/80 md:hidden"
           >
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.75),transparent_45%),linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.03))] dark:bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_40%),linear-gradient(180deg,rgba(255,255,255,0.08),rgba(15,23,42,0.02))]" />
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/80 dark:bg-white/15" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.08),transparent_28%),radial-gradient(circle_at_bottom,rgba(16,185,129,0.08),transparent_32%),linear-gradient(180deg,rgba(5,20,12,0.18),rgba(5,20,12,0.08))]" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/20" />
 
-            <div className="relative flex h-full flex-col rounded-[28px] border border-white/40 bg-white/20 p-4 dark:border-white/10 dark:bg-white/5">
-              <div className="flex items-start justify-between gap-4 border-b border-slate-900/8 pb-4 dark:border-white/10">
+            <div className="relative flex h-full flex-col rounded-[24px] border border-white/12 bg-forest-950/75 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+              <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/50 bg-white/45 text-amber-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-amber-300">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-amber-300/25 bg-amber-400/10 text-amber-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
                     <Leaf className="h-5 w-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-serif text-lg font-semibold tracking-tight text-slate-900 dark:text-white">Aromatic Menu</p>
-                    <p className="flex items-center gap-1 text-[11px] uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">
+                    <p className="font-serif text-lg font-semibold tracking-tight text-white">Explore</p>
+                    <p className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.24em] text-amber-200/70">
                       <Sparkles className="h-3.5 w-3.5" />
-                      Refined navigation
+                      Aromatic Solutions
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
                   aria-label="Close menu"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/50 bg-white/45 text-slate-600 transition-all duration-300 hover:bg-white/70 dark:border-white/10 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/15"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/80 transition-all duration-300 hover:bg-white/10 hover:text-white"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <nav className="mt-4 flex flex-1 flex-col gap-2">
+              <nav className="mt-4 flex-1 space-y-2 overflow-y-auto pr-1">
                 {navLinks.map((link) => (
                   link.to === '/#solutions' ? (
                     <a
                       key={link.label}
                       href={link.to}
                       onClick={(e) => handleSolutionsClick(e, link.to)}
-                      className={`${mobileLinkBase} text-slate-700 hover:bg-white/55 hover:text-forest-900 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white`}
+                      className={`${mobileLinkBase} border border-transparent text-stone-100/90 hover:border-amber-300/15 hover:bg-forest-900/75 hover:text-amber-200`}
                     >
                       <span>{link.label}</span>
-                      <ChevronRight className="h-4 w-4 text-slate-400 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-amber-500 dark:text-slate-500 dark:group-hover:text-amber-300" />
+                      <ChevronRight className="h-4 w-4 text-amber-200/45 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-amber-300" />
                     </a>
                   ) : (
                     <NavLink
@@ -271,8 +271,8 @@ export default function Navbar() {
                       className={({ isActive }) =>
                         `${mobileLinkBase} ${
                           isActive
-                            ? 'bg-white/70 text-forest-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.85),0_18px_35px_rgba(148,163,184,0.18)] dark:bg-white/10 dark:text-amber-300'
-                            : 'text-slate-700 hover:bg-white/55 hover:text-forest-900 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white'
+                            ? 'border border-amber-300/25 bg-gradient-to-r from-amber-400/18 to-emerald-400/10 text-amber-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]'
+                            : 'border border-transparent text-stone-100/90 hover:border-amber-300/15 hover:bg-forest-900/75 hover:text-amber-200'
                         }`
                       }
                     >
@@ -282,8 +282,8 @@ export default function Navbar() {
                           <ChevronRight
                             className={`h-4 w-4 transition-transform duration-300 ${
                               isActive
-                                ? 'translate-x-0.5 text-amber-500 dark:text-amber-300'
-                                : 'text-slate-400 group-hover:translate-x-0.5 group-hover:text-amber-500 dark:text-slate-500 dark:group-hover:text-amber-300'
+                                ? 'translate-x-0.5 text-amber-300'
+                                : 'text-amber-200/45 group-hover:translate-x-0.5 group-hover:text-amber-300'
                             }`}
                           />
                         </>
@@ -293,15 +293,15 @@ export default function Navbar() {
                 ))}
               </nav>
 
-              <div className="mt-4 rounded-[26px] border border-white/45 bg-white/40 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] dark:border-white/10 dark:bg-white/5">
-                <p className="text-xs font-medium uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Need sourcing support?</p>
-                <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+              <div className="mt-4 rounded-[22px] border border-amber-300/14 bg-forest-900/75 p-4">
+                <p className="text-xs font-medium uppercase tracking-[0.22em] text-amber-200/70">Need sourcing support?</p>
+                <p className="mt-2 text-sm leading-6 text-stone-200/85">
                   Connect with our team for formulations, bulk orders, and tailored aromatic blends.
                 </p>
                 <Link
                   to="/contact?inquiry=Bulk+Wholesale+Purchase"
                   onClick={() => setIsOpen(false)}
-                  className="mt-4 flex items-center justify-center gap-2 rounded-full border border-forest-800/10 bg-forest-900 px-4 py-3 text-sm font-medium text-white shadow-[0_16px_30px_rgba(17,24,39,0.22)] transition-all duration-300 hover:bg-forest-700 dark:border-white/10 dark:bg-amber-400 dark:text-slate-950 dark:hover:bg-amber-300"
+                  className="mt-4 flex items-center justify-center gap-2 rounded-full border border-amber-300/20 bg-amber-400 px-4 py-3 text-sm font-semibold text-forest-950 shadow-[0_12px_30px_rgba(251,191,36,0.18)] transition-all duration-300 hover:bg-amber-300"
                 >
                   Request a Quote
                   <ChevronRight className="w-4 h-4" />
@@ -320,7 +320,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-30 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.18),transparent_20%),rgba(15,23,42,0.48)] backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-30 bg-[linear-gradient(180deg,rgba(4,18,11,0.22),rgba(4,18,11,0.56))] backdrop-blur-[2px] md:hidden"
             onClick={() => setIsOpen(false)}
           />
         )}

@@ -1,7 +1,5 @@
 const { Resend } = require('resend');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 exports.handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -29,6 +27,16 @@ exports.handler = async (event) => {
   if (!name || !company || !email || !message) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Required fields missing.' }) };
   }
+
+  if (!process.env.RESEND_API_KEY) {
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: 'Contact API is not configured. Missing RESEND_API_KEY.' }),
+    };
+  }
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Invalid email address.' }) };

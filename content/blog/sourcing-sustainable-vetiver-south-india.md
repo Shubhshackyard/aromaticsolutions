@@ -7,7 +7,7 @@ author: Rahul Krishnaswamy
 authorRole: Head of Sustainable Sourcing
 date: "April 14, 2026"
 readTime: "6 min read"
-coverImage: "https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&auto=format&fit=crop"
+coverImage: "https://images.unsplash.com/photo-1558077114-1a0c4ff27a6a?w=800&auto=format&fit=crop"
 featured: false
 ---
 

@@ -1,8 +1,7 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: Shubhshackyard/aromaticsolutions
   branch: main
-
-local_backend: true
 
 media_folder: public/images/blog
 public_folder: /images/blog

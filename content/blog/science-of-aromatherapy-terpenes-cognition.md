@@ -7,7 +7,7 @@ author: Dr. Priya Menon
 authorRole: Lead Research Scientist
 date: "May 28, 2026"
 readTime: "8 min read"
-coverImage: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&auto=format&fit=crop"
+coverImage: "https://plus.unsplash.com/premium_photo-1661725568427-03c518bcfff2?w=800&auto=format&fit=crop"
 featured: true
 ---
 

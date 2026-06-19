@@ -1,20 +1,9 @@
-const LOCAL_FUNCTIONS_ORIGIN = 'http://localhost:8888';
-
-function getFunctionsBaseUrl() {
-  const configuredBaseUrl = import.meta.env.VITE_FUNCTIONS_BASE_URL;
-
+function getApiBaseUrl() {
+  const configuredBaseUrl = import.meta.env.VITE_API_BASE_URL;
   if (configuredBaseUrl) {
     return configuredBaseUrl.replace(/\/$/, '');
   }
-
-  if (import.meta.env.DEV && typeof window !== 'undefined') {
-    const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-    if (isLocalHost) {
-      return `${LOCAL_FUNCTIONS_ORIGIN}/.netlify/functions`;
-    }
-  }
-
-  return '/.netlify/functions';
+  return '';
 }
 
 async function readJsonSafely(response) {
@@ -28,15 +17,13 @@ async function readJsonSafely(response) {
     return JSON.parse(rawBody);
   } catch {
     return {
-      error: import.meta.env.DEV
-        ? 'API returned a non-JSON response. Start local functions with `npm run dev:netlify`.'
-        : 'API returned an unexpected response.',
+      error: 'API returned an unexpected response.',
     };
   }
 }
 
 export async function postFunction(functionName, payload) {
-  const endpoint = `${getFunctionsBaseUrl()}/${functionName}`;
+  const endpoint = `${getApiBaseUrl()}/api/${functionName}`;
 
   let response;
   try {
@@ -46,11 +33,11 @@ export async function postFunction(functionName, payload) {
       body: JSON.stringify(payload),
     });
   } catch (error) {
-    const isLocalDev = import.meta.env.DEV && typeof window !== 'undefined';
-    if (isLocalDev) {
-      throw new Error('Cannot reach local functions. Start Netlify dev with `npm run dev:netlify`.');
-    }
-    throw error;
+    throw new Error(
+      error instanceof Error && error.message
+        ? error.message
+        : 'Cannot reach the API server. Start the backend with `npm run dev:server`.'
+    );
   }
 
   const data = await readJsonSafely(response);

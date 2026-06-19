@@ -130,30 +130,19 @@ export default function Contact() {
               </div>
             ))}
 
-            {/* Map Placeholder */}
+            {/* Map Embed */}
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-stone-100 dark:border-slate-700 shadow-sm overflow-hidden">
-              <div className="relative bg-gradient-to-br from-forest-50 dark:from-slate-800 to-emerald-50 dark:to-slate-700 h-44 flex flex-col items-center justify-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-forest-900/10 flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-forest-800" />
-                </div>
-                <p className="font-medium text-forest-800 text-sm">Hajiganj Khurd, Harinagar</p>
-                <p className="text-forest-600 text-xs">Kannauj, Uttar Pradesh – 209725</p>
-                <a
-                  href="https://maps.google.com/?q=Hajiganj+Khurd+Harinagar+Kannauj+Uttar+Pradesh"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-1 text-xs font-medium text-amber-600 hover:text-amber-500 underline underline-offset-2"
-                >
-                  Open in Google Maps ↗
-                </a>
-                {/* Grid pattern overlay */}
-                <div className="absolute inset-0 opacity-10"
-                  style={{
-                    backgroundImage: 'linear-gradient(#1b4332 1px, transparent 1px), linear-gradient(90deg, #1b4332 1px, transparent 1px)',
-                    backgroundSize: '24px 24px',
-                  }}
-                />
-              </div>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3553.034006033846!2d79.908608676204!3d27.060674526559314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399e6f6452060f39%3A0x9fea00471d1c187b!2sHari%20Nagar%2C%20Safdarganj%2C%20Kannauj%2C%20Uttar%20Pradesh%20209725!5e0!3m2!1sen!2sin!4v1781796470854!5m2!1sen!2sin"
+                width="100%"
+                height="320"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Aromatic Solutions Location"
+                className="w-full"
+              />
             </div>
 
             {/* Socials */}

@@ -24,12 +24,75 @@ function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function getResendClient() {
+function getResendApiKey() {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     throw new Error('Missing RESEND_API_KEY. Configure the environment variable before sending email.');
   }
-  return new Resend(apiKey);
+  return apiKey;
+}
+
+function getResendClient() {
+  return new Resend(getResendApiKey());
+}
+
+async function resendApiRequest(path, { method = 'GET', body } = {}) {
+  const response = await fetch(`https://api.resend.com${path}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${getResendApiKey()}`,
+      'Content-Type': 'application/json',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  const rawText = await response.text();
+  let data = null;
+  if (rawText) {
+    try {
+      data = JSON.parse(rawText);
+    } catch {
+      data = { message: rawText };
+    }
+  }
+
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || `Resend request failed with status ${response.status}.`);
+  }
+
+  return data;
+}
+
+async function upsertNewsletterContact(email) {
+  const payload = {
+    unsubscribed: false,
+    properties: {
+      source: 'website_newsletter',
+    },
+  };
+
+  try {
+    await resendApiRequest(`/contacts/${encodeURIComponent(email)}`);
+    const contact = await resendApiRequest(`/contacts/${encodeURIComponent(email)}`, {
+      method: 'PATCH',
+      body: payload,
+    });
+    return { action: 'updated', contact };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to save newsletter contact.';
+    if (!/status 404/i.test(message) && !/not found/i.test(message)) {
+      throw error;
+    }
+
+    const contact = await resendApiRequest('/contacts', {
+      method: 'POST',
+      body: {
+        email,
+        ...payload,
+      },
+    });
+    return { action: 'created', contact };
+  }
 }
 
 async function sendResendEmail(payload) {
@@ -118,6 +181,8 @@ app.post('/api/subscribe', async (req, res) => {
   }
 
   try {
+    const { action } = await upsertNewsletterContact(email);
+
     const promises = [
       sendResendEmail({
         from: 'Aromatic Solutions <newsletter@aromaticsolutions.co.in>',
@@ -139,7 +204,7 @@ app.post('/api/subscribe', async (req, res) => {
     }
 
     await Promise.all(promises);
-    return sendJson(res, 200, { success: true });
+    return sendJson(res, 200, { success: true, contactAction: action });
   } catch (error) {
     console.error('Subscribe error:', error);
     return sendJson(res, 500, {

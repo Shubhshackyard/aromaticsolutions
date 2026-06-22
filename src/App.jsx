@@ -11,7 +11,7 @@ import Contact from './pages/Contact';
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }, [pathname]);
   return null;
 }

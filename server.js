@@ -24,75 +24,12 @@ function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function getResendApiKey() {
+function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     throw new Error('Missing RESEND_API_KEY. Configure the environment variable before sending email.');
   }
-  return apiKey;
-}
-
-function getResendClient() {
-  return new Resend(getResendApiKey());
-}
-
-async function resendApiRequest(path, { method = 'GET', body } = {}) {
-  const response = await fetch(`https://api.resend.com${path}`, {
-    method,
-    headers: {
-      Authorization: `Bearer ${getResendApiKey()}`,
-      'Content-Type': 'application/json',
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-
-  const rawText = await response.text();
-  let data = null;
-  if (rawText) {
-    try {
-      data = JSON.parse(rawText);
-    } catch {
-      data = { message: rawText };
-    }
-  }
-
-  if (!response.ok) {
-    throw new Error(data?.message || data?.error || `Resend request failed with status ${response.status}.`);
-  }
-
-  return data;
-}
-
-async function upsertNewsletterContact(email) {
-  const payload = {
-    unsubscribed: false,
-    properties: {
-      source: 'website_newsletter',
-    },
-  };
-
-  try {
-    await resendApiRequest(`/contacts/${encodeURIComponent(email)}`);
-    const contact = await resendApiRequest(`/contacts/${encodeURIComponent(email)}`, {
-      method: 'PATCH',
-      body: payload,
-    });
-    return { action: 'updated', contact };
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Failed to save newsletter contact.';
-    if (!/status 404/i.test(message) && !/not found/i.test(message)) {
-      throw error;
-    }
-
-    const contact = await resendApiRequest('/contacts', {
-      method: 'POST',
-      body: {
-        email,
-        ...payload,
-      },
-    });
-    return { action: 'created', contact };
-  }
+  return new Resend(apiKey);
 }
 
 async function sendResendEmail(payload) {
@@ -146,13 +83,13 @@ app.post('/api/contact', async (req, res) => {
         `,
       }),
       sendResendEmail({
-        from: 'Aromatic Solutions <no-reply@aromaticsolutions.co.in>',
+        from: 'Aromatic Solutions <info@aromaticsolutions.co.in>',
         to: [email],
         subject: "We've received your enquiry — Aromatic Solutions",
         html: `
           <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937;">
-            <h2>Thank you for contacting us</h2>
-            <p>We have received your enquiry and will get back to you shortly.</p>
+            <h2>Thanks for reaching out through our contact form. We received your message and will get back to you within 1 business day.</h2>
+            <p>If your request is urgent, reply to this email and we’ll prioritize it.</p>
           </div>
         `,
       }),
@@ -181,14 +118,12 @@ app.post('/api/subscribe', async (req, res) => {
   }
 
   try {
-    const { action } = await upsertNewsletterContact(email);
-
     const promises = [
       sendResendEmail({
         from: 'Aromatic Solutions <newsletter@aromaticsolutions.co.in>',
         to: [email],
         subject: 'Welcome to The Aromatic Journal 🌿',
-        html: '<div>Thank you for subscribing to The Aromatic Journal.</div>',
+        html: '<div>Thank you for subscribing to The Aromatic Journal.</br>Read more here: https://aromaticsolutions.co.in/blog</br>If you’d rather not receive these emails, you can unsubscribe here.</div>',
       }),
     ];
 
@@ -204,7 +139,7 @@ app.post('/api/subscribe', async (req, res) => {
     }
 
     await Promise.all(promises);
-    return sendJson(res, 200, { success: true, contactAction: action });
+    return sendJson(res, 200, { success: true });
   } catch (error) {
     console.error('Subscribe error:', error);
     return sendJson(res, 500, {

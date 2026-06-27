@@ -19,6 +19,7 @@ export default function Newsletter() {
     setLoading(true);
     try {
       await postFunction('subscribe', { email });
+      setEmail('');
       setSubmitted(true);
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
@@ -35,10 +36,10 @@ export default function Newsletter() {
             key="success"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 text-amber-300 text-sm font-medium"
+            className="flex items-center gap-2 text-sm font-medium text-emerald-300"
           >
             <CheckCircle className="w-5 h-5 flex-shrink-0" />
-            <span>Subscribed! Welcome to our knowledge community.</span>
+            <span>Subscribed. Welcome to our knowledge community.</span>
           </motion.div>
         ) : (
           <motion.form
@@ -51,13 +52,14 @@ export default function Newsletter() {
               value={email}
               onChange={(e) => { setEmail(e.target.value); setError(''); }}
               placeholder="your@email.com"
-              className="flex-1 px-4 py-2.5 rounded-full bg-forest-800/60 border border-forest-600/50 text-white placeholder-forest-400 text-sm focus:outline-none focus:border-amber-400 transition-colors"
+              className="field-control flex-1 rounded-full border-forest-600/50 bg-forest-800/60 text-white placeholder-forest-400 focus:ring-amber-400/40 hover:border-forest-500"
               aria-label="Email address for newsletter"
             />
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center justify-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 disabled:opacity-70 disabled:cursor-not-allowed text-white font-medium text-sm rounded-full transition-all shrink-0"
+              aria-busy={loading}
+              className="button-primary shrink-0 px-5 py-2.5"
               aria-label="Subscribe to newsletter"
             >
               {loading ? (
@@ -70,7 +72,7 @@ export default function Newsletter() {
           </motion.form>
         )}
       </AnimatePresence>
-      {error && <p className="text-red-400 text-xs mt-1.5">{error}</p>}
+      {error && <p className="field-error mt-1.5 text-rose-300" role="alert">{error}</p>}
     </div>
   );
 }

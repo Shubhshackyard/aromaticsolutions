@@ -7,7 +7,7 @@ media_folder: public/images/blog
 public_folder: /images/blog
 
 site_url: https://www.aromaticsolutions.co.in
-logo_url: https://www.aromaticsolutions.co.in/favicon.ico
+logo_url: /logo-ex.png
 
 collections:
   - name: "blog"

@@ -1,13 +1,12 @@
-import { Link } from 'react-router-dom';
-import { Leaf, Linkedin, Instagram, Mail, Phone, MapPin } from 'lucide-react';
+import { Linkedin, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 import Newsletter from './Newsletter';
 
 const quickLinks = [
-  { label: 'Home', to: '/' },
-  { label: 'Our Solutions', to: '/#solutions' },
-  { label: 'Blog & Knowledge Hub', to: '/blog' },
-  { label: 'Contact Us', to: '/contact' },
-  { label: 'Request a Quote', to: '/contact?inquiry=Bulk+Wholesale+Purchase' },
+  { label: 'Home', to: '#home' },
+  { label: 'Our Solutions', to: '#solutions' },
+  { label: 'Blog & Knowledge Hub', to: '#blog' },
+  { label: 'Contact Us', to: '#contact' },
+  { label: 'Request a Quote', to: '#contact' },
 ];
 
 const industries = [
@@ -26,28 +25,28 @@ export default function Footer() {
 
   return (
     <footer className="bg-forest-950 text-forest-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+      <div className="section-shell pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
 
           {/* Col 1 — Brand */}
           <div>
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-full bg-forest-800 flex items-center justify-center">
-                <Leaf className="w-5 h-5 text-amber-400" />
+            <button type="button" onClick={() => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} className="flex items-center gap-2 mb-4 text-left">
+              <div className="w-12 h-12 overflow-hidden rounded-full border border-white/10 bg-transparent p-0.5">
+                <img src="/logo.png" alt="Aromatic Solutions" className="h-full w-full object-fill" />
               </div>
               <div className="leading-none">
                 <span className="block font-serif font-bold text-white text-base">Aromatic</span>
                 <span className="block text-[10px] font-medium text-amber-400 tracking-widest uppercase">Solutions</span>
               </div>
-            </Link>
+            </button>
             <p className="text-sm text-forest-400 leading-relaxed mb-5">
               Premium manufacturer and distributor of GC/MS-tested essential oils, carrier oils, herbal extracts, and custom industrial fragrances. Bridging nature's purity with scientific precision.
             </p>
             <div className="flex items-center gap-3">
-              <a href="https://www.linkedin.com/in/aromatic-solutions-a03981353" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="p-2 rounded-full bg-forest-800 hover:bg-amber-500 transition-colors">
+              <a href="https://www.linkedin.com/in/aromatic-solutions-a03981353" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-forest-800 transition-colors hover:bg-amber-500">
                 <Linkedin className="w-4 h-4" />
               </a>
-              <a href="https://www.instagram.com/aromatic_solutions" target="_blank" rel="noreferrer" aria-label="Instagram" className="p-2 rounded-full bg-forest-800 hover:bg-amber-500 transition-colors">
+              <a href="https://www.instagram.com/aromatic_solutions" target="_blank" rel="noreferrer" aria-label="Instagram" className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-forest-800 transition-colors hover:bg-amber-500">
                 <Instagram className="w-4 h-4" />
               </a>
             </div>
@@ -59,12 +58,16 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {quickLinks.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    to={link.to}
-                    className="text-sm text-forest-400 hover:text-amber-400 transition-colors"
+                  <a
+                    href={link.to}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      document.getElementById(link.to.replace('#', ''))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
+                    className="text-sm text-forest-400 transition-colors hover:text-amber-400 hover:underline underline-offset-4"
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>

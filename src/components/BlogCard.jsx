@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { ArrowRight, Clock, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -8,14 +7,16 @@ const categoryColors = {
   'Industry Trends': 'bg-amber-50 text-amber-700 border-amber-200',
 };
 
-export default function BlogCard({ post, index = 0 }) {
+export default function BlogCard({ post, index = 0, active = false, onReadMore }) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-stone-100 dark:border-slate-700 transition-all duration-300 group flex flex-col"
+      className={`surface-card-soft overflow-hidden transition-all duration-300 group flex flex-col hover:shadow-lg ${
+        active ? 'ring-2 ring-amber-400/70 dark:ring-amber-300/60' : ''
+      }`}
     >
       {/* Cover */}
       <div className="relative overflow-hidden aspect-[16/9]">
@@ -55,14 +56,15 @@ export default function BlogCard({ post, index = 0 }) {
               {post.readTime}
             </span>
           </div>
-          <Link
-            to={`/blog/${post.slug}`}
+          <button
+            type="button"
+            onClick={onReadMore}
             className="flex items-center gap-1 text-sm font-medium text-forest-700 dark:text-amber-400 hover:text-forest-900 dark:hover:text-amber-300 group/link transition-colors"
             aria-label={`Read article: ${post.title}`}
           >
-            Read Article
+            {active ? 'Showing Article' : 'Read Article'}
             <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-          </Link>
+          </button>
         </div>
       </div>
     </motion.article>

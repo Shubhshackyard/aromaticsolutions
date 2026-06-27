@@ -28,7 +28,7 @@ function InputField({ label, id, error, children }) {
 }
 
 export default function ContactForm({ defaultInquiry = '' }) {
-  const [form, setForm] = useState({
+  const createInitialForm = () => ({
     name: '',
     company: '',
     email: '',
@@ -36,6 +36,8 @@ export default function ContactForm({ defaultInquiry = '' }) {
     inquiry: defaultInquiry || inquiryTypes[0],
     message: '',
   });
+
+  const [form, setForm] = useState(createInitialForm);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -79,10 +81,10 @@ export default function ContactForm({ defaultInquiry = '' }) {
   };
 
   const inputClass = (field) =>
-    `w-full px-4 py-2.5 rounded-xl border text-sm font-sans text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-800 transition-all focus:outline-none focus:ring-2 focus:ring-forest-400 dark:focus:ring-amber-500/40 ${
+    `field-control ${
       errors[field]
-        ? 'border-red-300 bg-red-50 dark:bg-red-900/20 focus:ring-red-300'
-        : 'border-stone-200 dark:border-slate-600 hover:border-stone-300 dark:hover:border-slate-500'
+        ? 'border-red-300 bg-red-50 focus:ring-red-300 dark:border-red-400/40 dark:bg-red-950/20'
+        : 'border-stone-200 hover:border-stone-300 focus:ring-forest-400 dark:border-slate-600 dark:hover:border-slate-500 dark:focus:ring-amber-500/40'
     }`;
 
   return (
@@ -117,8 +119,13 @@ export default function ContactForm({ defaultInquiry = '' }) {
             to you within <strong>24 business hours</strong>.
           </p>
           <button
-            onClick={() => { setSubmitted(false); setForm({ name: '', company: '', email: '', phone: '', inquiry: inquiryTypes[0], message: '' }); }}
-            className="mt-8 px-6 py-2.5 border border-forest-300 text-forest-700 text-sm font-medium rounded-full hover:bg-forest-50 transition-colors"
+            onClick={() => {
+              setSubmitted(false);
+              setForm(createInitialForm());
+              setErrors({});
+              setServerError('');
+            }}
+            className="button-secondary mt-8"
           >
             Submit Another Enquiry
           </button>
@@ -203,7 +210,7 @@ export default function ContactForm({ defaultInquiry = '' }) {
           </InputField>
 
           {serverError && (
-            <p className="flex items-center gap-2 text-sm text-red-500">
+            <p className="field-error" role="alert" aria-live="polite">
               <AlertCircle className="w-4 h-4 shrink-0" />
               {serverError}
             </p>
@@ -211,7 +218,8 @@ export default function ContactForm({ defaultInquiry = '' }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-forest-900 hover:bg-forest-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg text-sm"
+            aria-busy={loading}
+            className="button-primary w-full rounded-xl bg-forest-900 px-6 py-3.5 shadow-md shadow-forest-950/10 hover:bg-forest-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-forest-800 dark:hover:bg-forest-700"
           >
             {loading ? (
               <><Loader2 className="w-4 h-4 animate-spin" /> Sending…</>

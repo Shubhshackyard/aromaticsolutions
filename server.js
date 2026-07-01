@@ -1,8 +1,13 @@
 import express from 'express';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Resend } from 'resend';
 
 const app = express();
 const preferredPort = Number(process.env.PORT || 3001);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const distPath = path.join(__dirname, 'dist');
 
 app.use(express.json());
 
@@ -150,6 +155,20 @@ app.post('/api/subscribe', async (req, res) => {
 
 app.get('/health', (_req, res) => {
   res.json({ ok: true });
+});
+
+app.use(express.static(distPath));
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    return next();
+  }
+
+  return res.sendFile(path.join(distPath, 'index.html'), (error) => {
+    if (error) {
+      next(error);
+    }
+  });
 });
 
 function listenOnPort(port) {

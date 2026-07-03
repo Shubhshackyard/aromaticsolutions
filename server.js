@@ -2,6 +2,12 @@ import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Resend } from 'resend';
+import {
+  buildContactAutoReply,
+  buildContactNotificationEmail,
+  buildNewsletterNotificationEmail,
+  buildNewsletterWelcomeEmail,
+} from './emailTemplates.js';
 
 const app = express();
 const preferredPort = Number(process.env.PORT || 3001);
@@ -67,36 +73,38 @@ app.post('/api/contact', async (req, res) => {
   try {
     const notifyTo = process.env.NOTIFY_EMAIL || 'info@aromaticsolutions.co.in';
     const year = new Date().getFullYear();
+    const notificationEmail = buildContactNotificationEmail({
+      name,
+      company,
+      email,
+      phone,
+      inquiry,
+      message,
+      year,
+    });
+    const autoReplyEmail = buildContactAutoReply({
+      name,
+      inquiry: inquiry || 'General Support',
+    });
 
     await Promise.all([
       sendResendEmail({
         from: 'Aromatic Solutions <no-reply@aromaticsolutions.co.in>',
         to: [notifyTo],
-        replyTo: email,
+        reply_to: email,
         subject: `New Enquiry: ${inquiry || 'General Support'} — ${company}`,
-        html: `
-          <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937;">
-            <h2>New website enquiry</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Company:</strong> ${company}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
-            <p><strong>Inquiry:</strong> ${inquiry || 'General Support'}</p>
-            <p><strong>Message:</strong><br />${message}</p>
-            <p style="margin-top: 16px; color: #6b7280;">Submitted on ${year}</p>
-          </div>
-        `,
+        html: notificationEmail.html,
+        text: notificationEmail.text,
+        headers: {
+          'X-Entity-Ref-ID': 'contact-notification',
+        },
       }),
       sendResendEmail({
         from: 'Aromatic Solutions <info@aromaticsolutions.co.in>',
         to: [email],
         subject: "We've received your enquiry — Aromatic Solutions",
-        html: `
-          <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937;">
-            <h2>Thanks for reaching out through our contact form. We received your message and will get back to you within 1 business day.</h2>
-            <p>If your request is urgent, reply to this email and we’ll prioritize it.</p>
-          </div>
-        `,
+        html: autoReplyEmail.html,
+        text: autoReplyEmail.text,
       }),
     ]);
 
@@ -123,12 +131,16 @@ app.post('/api/subscribe', async (req, res) => {
   }
 
   try {
+    const welcomeEmail = buildNewsletterWelcomeEmail(email);
+    const subscriberNotification = buildNewsletterNotificationEmail(email);
     const promises = [
       sendResendEmail({
         from: 'Aromatic Solutions <newsletter@aromaticsolutions.co.in>',
         to: [email],
-        subject: 'Welcome to The Aromatic Journal 🌿',
-        html: '<div>Thank you for subscribing to The Aromatic Journal.</br>Read more here: https://aromaticsolutions.co.in/blog</br>If you’d rather not receive these emails, you can unsubscribe here.</div>',
+        subject: 'Welcome to The Aromatic Journal',
+        html: welcomeEmail.html,
+        text: welcomeEmail.text,
+        headers: welcomeEmail.headers,
       }),
     ];
 
@@ -138,7 +150,8 @@ app.post('/api/subscribe', async (req, res) => {
           from: 'Aromatic Solutions <newsletter@aromaticsolutions.co.in>',
           to: [process.env.NOTIFY_EMAIL],
           subject: `New Newsletter Subscriber: ${email}`,
-          html: `<p>New subscriber: <strong>${email}</strong></p>`,
+          html: subscriberNotification.html,
+          text: subscriberNotification.text,
         })
       );
     }

@@ -3,6 +3,7 @@ const BRAND = {
   tagline: "Nature's Purest Essences",
   website: 'https://www.aromaticsolutions.co.in',
   journal: 'https://www.aromaticsolutions.co.in/blog',
+  logo: 'https://www.aromaticsolutions.co.in/logo.png',
   supportEmail: 'newsletter@aromaticsolutions.co.in',
   city: 'Kannauj, India',
   categories: ['Essential Oils', 'Carrier Oils', 'Herbal Extracts', 'Industrial Fragrances'],
@@ -56,6 +57,7 @@ function renderButton({ href, label }) {
         <td style="border-radius:999px;background:${COLORS.accent};">
           <a
             href="${escapeHtml(href)}"
+            class="as-button"
             style="display:inline-block;color:#ffffff;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1;padding:16px 30px;border-radius:999px;font-weight:600;letter-spacing:0.02em;"
           >
             ${escapeHtml(label)}
@@ -77,7 +79,7 @@ function renderCategoryChips(categories) {
         <td style="padding:0 8px 8px 0;">
           <table role="presentation" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td style="background:${COLORS.goldSoft};border:1px solid ${COLORS.divider};border-radius:999px;padding:7px 14px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1;color:${COLORS.accentDeep};letter-spacing:0.03em;white-space:nowrap;">
+              <td class="as-chip" style="background:${COLORS.goldSoft};border:1px solid ${COLORS.divider};border-radius:999px;padding:7px 14px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1;color:${COLORS.accentDeep};letter-spacing:0.03em;white-space:nowrap;">
                 ${escapeHtml(label)}
               </td>
             </tr>
@@ -105,8 +107,8 @@ function renderBulletList(items) {
         .map(
           (item) => `
             <tr>
-              <td style="padding:0 10px 14px 0;vertical-align:top;width:20px;color:${COLORS.gold};font-size:18px;line-height:1.6;">&#10022;</td>
-              <td style="padding:0 0 14px;color:${COLORS.text};font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;">${escapeHtml(item)}</td>
+              <td class="as-bullet" style="padding:0 10px 14px 0;vertical-align:top;width:20px;color:${COLORS.gold};font-size:18px;line-height:1.6;">&#10022;</td>
+              <td class="as-body-text" style="padding:0 0 14px;color:${COLORS.text};font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;">${escapeHtml(item)}</td>
             </tr>
           `
         )
@@ -126,8 +128,8 @@ function renderDetailTable(items) {
         .map(
           (item) => `
             <tr>
-              <td style="width:150px;padding:14px 0;border-bottom:1px solid ${COLORS.divider};font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.5;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.1em;">${escapeHtml(item.label)}</td>
-              <td style="padding:14px 0;border-bottom:1px solid ${COLORS.divider};font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.text};word-break:break-word;">${escapeHtml(item.value)}</td>
+              <td class="as-muted" style="width:150px;padding:14px 0;border-bottom:1px solid ${COLORS.divider};font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.5;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.1em;">${escapeHtml(item.label)}</td>
+              <td class="as-body-text" style="padding:14px 0;border-bottom:1px solid ${COLORS.divider};font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.text};word-break:break-word;">${escapeHtml(item.value)}</td>
             </tr>
           `
         )
@@ -136,12 +138,15 @@ function renderDetailTable(items) {
   `;
 }
 
-function renderLeafMark() {
+function renderLogoMark() {
   return `
-    <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto 10px;">
-      <path d="M15 3C9 8 6 14 10 22c1.5 3 4 4.5 5 4.5s3.5-1.5 5-4.5c4-8 1-14-5-19.5z" fill="${COLORS.accent}"/>
-      <path d="M15 6v18" stroke="${COLORS.goldSoft}" stroke-width="1.2"/>
-    </svg>
+    <img
+      src="${escapeHtml(BRAND.logo)}"
+      alt="${escapeHtml(BRAND.name)}"
+      width="54"
+      height="54"
+      style="display:block;width:54px;height:54px;object-fit:contain;margin:0 auto 12px;border-radius:16px;"
+    />
   `;
 }
 
@@ -181,43 +186,100 @@ function buildEmailShell({
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta name="x-apple-disable-message-reformatting" />
+      <meta name="color-scheme" content="light dark" />
+      <meta name="supported-color-schemes" content="light dark" />
       <title>${escapeHtml(title)}</title>
+      <style>
+        :root {
+          color-scheme: light dark;
+          supported-color-schemes: light dark;
+        }
+        @media (prefers-color-scheme: dark) {
+          body.as-body,
+          .as-shell {
+            background: #171611 !important;
+          }
+          .as-card {
+            background: #262421 !important;
+            border-color: #3a352e !important;
+          }
+          .as-card-topbar {
+            background: linear-gradient(90deg, #6b8b7a 0%, #c5a15a 100%) !important;
+          }
+          .as-brand-title,
+          .as-heading,
+          .as-body-text,
+          .as-section-heading,
+          .as-footer-title {
+            color: #f3eee3 !important;
+          }
+          .as-brand-tagline {
+            color: #d1b16f !important;
+          }
+          .as-muted,
+          .as-footer-text {
+            color: #c0b7aa !important;
+          }
+          .as-divider {
+            border-color: #433d34 !important;
+          }
+          .as-chip {
+            background: #342f28 !important;
+            border-color: #4a4339 !important;
+            color: #efdfbe !important;
+          }
+          .as-footer {
+            background: #2d2924 !important;
+            border-color: #3c372f !important;
+          }
+          .as-link {
+            color: #d7e6dc !important;
+          }
+          .as-button {
+            background: #9f8150 !important;
+            color: #14120f !important;
+          }
+          .as-bullet {
+            color: #d7b87a !important;
+          }
+        }
+      </style>
     </head>
-    <body style="margin:0;padding:0;background:${COLORS.background};">
+    <body class="as-body" style="margin:0;padding:0;background:${COLORS.background};">
       <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;mso-hide:all;">
         ${escapeHtml(preheader)}
       </div>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.background};width:100%;padding:36px 16px;">
+      <table class="as-shell" role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.background};width:100%;padding:36px 16px;">
         <tr>
           <td align="center">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:100%;max-width:600px;">
               <tr>
                 <td style="padding:0 0 20px;text-align:center;font-family:Georgia,'Times New Roman',serif;">
-                  ${renderLeafMark()}
-                  <div style="font-size:20px;line-height:1.2;font-weight:700;letter-spacing:0.06em;color:${COLORS.text};text-transform:uppercase;">${escapeHtml(BRAND.name)}</div>
-                  <div style="margin-top:6px;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.4;color:${COLORS.gold};letter-spacing:0.14em;text-transform:uppercase;">${escapeHtml(BRAND.tagline)}</div>
+                  ${renderLogoMark()}
+                  <div class="as-brand-title" style="font-size:20px;line-height:1.2;font-weight:700;letter-spacing:0.06em;color:${COLORS.text};text-transform:uppercase;">${escapeHtml(BRAND.name)}</div>
+                  <div class="as-brand-tagline" style="margin-top:6px;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.4;color:${COLORS.gold};letter-spacing:0.14em;text-transform:uppercase;">${escapeHtml(BRAND.tagline)}</div>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.card};border:1px solid ${COLORS.divider};border-radius:18px;overflow:hidden;">
+                  <table class="as-card" role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.card};border:1px solid ${COLORS.divider};border-radius:18px;overflow:hidden;">
                     <tr>
-                      <td style="height:5px;line-height:5px;font-size:0;background:linear-gradient(90deg, ${COLORS.accent} 0%, ${COLORS.gold} 100%);">&nbsp;</td>
+                      <td class="as-card-topbar" style="height:5px;line-height:5px;font-size:0;background:linear-gradient(90deg, ${COLORS.accent} 0%, ${COLORS.gold} 100%);">&nbsp;</td>
                     </tr>
                     <tr>
                       <td style="padding:40px 40px 36px;font-family:Arial,Helvetica,sans-serif;color:${COLORS.text};">
-                        <div style="font-size:12px;line-height:1.4;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.14em;">${escapeHtml(eyebrow)}</div>
-                        <h1 style="margin:12px 0 0;font-family:Georgia,'Times New Roman',serif;font-size:30px;line-height:1.25;font-weight:700;letter-spacing:-0.01em;color:${COLORS.text};">${escapeHtml(title)}</h1>
-                        <p style="margin:18px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">Hello ${escapeHtml(recipient)},</p>
-                        ${intro ? `<p style="margin:14px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">${escapeHtml(intro)}</p>` : ''}
+                        <div class="as-eyebrow" style="font-size:12px;line-height:1.4;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.14em;">${escapeHtml(eyebrow)}</div>
+                        <h1 class="as-heading" style="margin:12px 0 0;font-family:Georgia,'Times New Roman',serif;font-size:30px;line-height:1.25;font-weight:700;letter-spacing:-0.01em;color:${COLORS.text};">${escapeHtml(title)}</h1>
+                        <p class="as-body-text" style="margin:18px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">Hello ${escapeHtml(recipient)},</p>
+                        ${intro ? `<p class="as-body-text" style="margin:14px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">${escapeHtml(intro)}</p>` : ''}
                         ${categoryChips ? renderCategoryChips(BRAND.categories) : ''}
                         ${bodyHtml}
                         ${sections
                           .map(
                             (section) => `
-                              <div style="margin-top:30px;padding-top:26px;border-top:1px solid ${COLORS.divider};">
-                                <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;line-height:1.3;font-weight:700;color:${COLORS.text};">${escapeHtml(section.heading)}</div>
-                                ${section.copy ? `<p style="margin:10px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">${escapeHtml(section.copy)}</p>` : ''}
+                              <div class="as-divider" style="margin-top:30px;padding-top:26px;border-top:1px solid ${COLORS.divider};">
+                                <div class="as-section-heading" style="font-family:Georgia,'Times New Roman',serif;font-size:19px;line-height:1.3;font-weight:700;color:${COLORS.text};">${escapeHtml(section.heading)}</div>
+                                ${section.copy ? `<p class="as-body-text" style="margin:10px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">${escapeHtml(section.copy)}</p>` : ''}
                                 ${section.bullets ? renderBulletList(section.bullets) : ''}
                                 ${section.detailRows ? renderDetailTable(section.detailRows) : ''}
                               </div>
@@ -225,8 +287,8 @@ function buildEmailShell({
                           )
                           .join('')}
                         ${button ? renderButton(button) : ''}
-                        ${closing ? `<p style="margin:30px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">${escapeHtml(closing)}</p>` : ''}
-                        ${footerNote ? `<p style="margin:18px 0 0;font-size:12.5px;line-height:1.7;color:${COLORS.muted};">${escapeHtml(footerNote)}</p>` : ''}
+                        ${closing ? `<p class="as-body-text" style="margin:30px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">${escapeHtml(closing)}</p>` : ''}
+                        ${footerNote ? `<p class="as-muted" style="margin:18px 0 0;font-size:12.5px;line-height:1.7;color:${COLORS.muted};">${escapeHtml(footerNote)}</p>` : ''}
                       </td>
                     </tr>
                   </table>
@@ -234,13 +296,13 @@ function buildEmailShell({
               </tr>
               <tr>
                 <td style="padding:18px 0 0;">
-                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.footer};border:1px solid ${COLORS.divider};border-radius:16px;">
+                  <table class="as-footer" role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.footer};border:1px solid ${COLORS.divider};border-radius:16px;">
                     <tr>
                       <td style="padding:22px 24px;font-family:Arial,Helvetica,sans-serif;font-size:11.5px;line-height:1.8;color:${COLORS.muted};text-align:center;">
-                        <div style="font-weight:700;color:${COLORS.text};letter-spacing:0.04em;">${escapeHtml(BRAND.name.toUpperCase())}</div>
-                        <div>${escapeHtml(BRAND.tagline)} &middot; ${escapeHtml(BRAND.city)}</div>
-                        <div style="margin-top:6px;"><a href="${escapeHtml(BRAND.website)}" style="color:${COLORS.accent};text-decoration:none;">${escapeHtml(BRAND.website.replace('https://', ''))}</a></div>
-                        ${managementLinks.length ? `<div style="margin-top:10px;">${managementLinks.join(` <span style="color:${COLORS.divider};">|</span> `)}</div>` : ''}
+                        <div class="as-footer-title" style="font-weight:700;color:${COLORS.text};letter-spacing:0.04em;">${escapeHtml(BRAND.name.toUpperCase())}</div>
+                        <div class="as-footer-text">${escapeHtml(BRAND.tagline)} &middot; ${escapeHtml(BRAND.city)}</div>
+                        <div style="margin-top:6px;"><a class="as-link" href="${escapeHtml(BRAND.website)}" style="color:${COLORS.accent};text-decoration:none;">${escapeHtml(BRAND.website.replace('https://', ''))}</a></div>
+                        ${managementLinks.length ? `<div class="as-footer-text" style="margin-top:10px;">${managementLinks.join(` <span style="color:${COLORS.divider};">|</span> `)}</div>` : ''}
                       </td>
                     </tr>
                   </table>

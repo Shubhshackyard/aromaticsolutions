@@ -1,22 +1,24 @@
 const BRAND = {
   name: 'Aromatic Solutions',
-  tagline: 'Crafting nature into fragrance',
-  website: 'https://aromaticsolutions.co.in',
-  journal: 'https://aromaticsolutions.co.in/blog',
+  tagline: "Nature's Purest Essences",
+  website: 'https://www.aromaticsolutions.co.in',
+  journal: 'https://www.aromaticsolutions.co.in/blog',
   supportEmail: 'newsletter@aromaticsolutions.co.in',
   city: 'Kannauj, India',
+  categories: ['Essential Oils', 'Carrier Oils', 'Herbal Extracts', 'Industrial Fragrances'],
 };
 
 const COLORS = {
-  background: '#FAF8F4',
+  background: '#F6F1E7',
   card: '#FFFFFF',
-  text: '#1B1B1B',
-  muted: '#6A6A6A',
-  accent: '#214B3E',
-  accentHover: '#17372D',
-  gold: '#A67C32',
-  divider: '#ECE7DF',
-  footer: '#F5F2EC',
+  text: '#1E1B16',
+  muted: '#7A7166',
+  accent: '#2F4A3C',
+  accentDeep: '#1E3229',
+  gold: '#B8863C',
+  goldSoft: '#F1E3C8',
+  divider: '#E9E1D2',
+  footer: '#EFE8D9',
 };
 
 function escapeHtml(value) {
@@ -49,17 +51,45 @@ function renderButton({ href, label }) {
   }
 
   return `
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0 0;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0 0;">
       <tr>
-        <td>
+        <td style="border-radius:999px;background:${COLORS.accent};">
           <a
             href="${escapeHtml(href)}"
-            style="display:inline-block;background:${COLORS.accent};color:#ffffff;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1;padding:15px 24px;border-radius:999px;font-weight:600;"
+            style="display:inline-block;color:#ffffff;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1;padding:16px 30px;border-radius:999px;font-weight:600;letter-spacing:0.02em;"
           >
             ${escapeHtml(label)}
           </a>
         </td>
       </tr>
+    </table>
+  `;
+}
+
+function renderCategoryChips(categories) {
+  if (!categories?.length) {
+    return '';
+  }
+
+  const chips = categories
+    .map(
+      (label) => `
+        <td style="padding:0 8px 8px 0;">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="background:${COLORS.goldSoft};border:1px solid ${COLORS.divider};border-radius:999px;padding:7px 14px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1;color:${COLORS.accentDeep};letter-spacing:0.03em;white-space:nowrap;">
+                ${escapeHtml(label)}
+              </td>
+            </tr>
+          </table>
+        </td>
+      `
+    )
+    .join('');
+
+  return `
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;">
+      <tr>${chips}</tr>
     </table>
   `;
 }
@@ -70,13 +100,13 @@ function renderBulletList(items) {
   }
 
   return `
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin-top:24px;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin-top:22px;">
       ${items
         .map(
           (item) => `
             <tr>
-              <td style="padding:0 0 14px;vertical-align:top;width:22px;color:${COLORS.gold};font-size:20px;line-height:1;">&bull;</td>
-              <td style="padding:0 0 14px;color:${COLORS.text};font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.7;">${escapeHtml(item)}</td>
+              <td style="padding:0 10px 14px 0;vertical-align:top;width:20px;color:${COLORS.gold};font-size:18px;line-height:1.6;">&#10022;</td>
+              <td style="padding:0 0 14px;color:${COLORS.text};font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;">${escapeHtml(item)}</td>
             </tr>
           `
         )
@@ -91,13 +121,13 @@ function renderDetailTable(items) {
   }
 
   return `
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin-top:24px;border-top:1px solid ${COLORS.divider};">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin-top:22px;border-top:1px solid ${COLORS.divider};">
       ${items
         .map(
           (item) => `
             <tr>
-              <td style="width:165px;padding:14px 0;border-bottom:1px solid ${COLORS.divider};font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.08em;">${escapeHtml(item.label)}</td>
-              <td style="padding:14px 0;border-bottom:1px solid ${COLORS.divider};font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:${COLORS.text};word-break:break-word;">${escapeHtml(item.value)}</td>
+              <td style="width:150px;padding:14px 0;border-bottom:1px solid ${COLORS.divider};font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.5;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.1em;">${escapeHtml(item.label)}</td>
+              <td style="padding:14px 0;border-bottom:1px solid ${COLORS.divider};font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.text};word-break:break-word;">${escapeHtml(item.value)}</td>
             </tr>
           `
         )
@@ -106,11 +136,22 @@ function renderDetailTable(items) {
   `;
 }
 
+function renderLeafMark() {
+  return `
+    <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto 10px;">
+      <path d="M15 3C9 8 6 14 10 22c1.5 3 4 4.5 5 4.5s3.5-1.5 5-4.5c4-8 1-14-5-19.5z" fill="${COLORS.accent}"/>
+      <path d="M15 6v18" stroke="${COLORS.goldSoft}" stroke-width="1.2"/>
+    </svg>
+  `;
+}
+
 function buildEmailShell({
   preheader,
   recipientName,
+  eyebrow = 'Aromatic Solutions',
   title,
   intro,
+  categoryChips = false,
   bodyHtml = '',
   sections = [],
   button,
@@ -146,35 +187,37 @@ function buildEmailShell({
       <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;mso-hide:all;">
         ${escapeHtml(preheader)}
       </div>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.background};width:100%;padding:32px 16px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.background};width:100%;padding:36px 16px;">
         <tr>
           <td align="center">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:100%;max-width:600px;">
               <tr>
-                <td style="padding:0 0 16px;text-align:center;font-family:Arial,Helvetica,sans-serif;">
-                  <div style="font-size:18px;line-height:1.2;font-weight:700;letter-spacing:0.04em;color:${COLORS.text};">${escapeHtml(BRAND.name)}</div>
-                  <div style="margin-top:6px;font-size:12px;line-height:1.4;color:${COLORS.muted};letter-spacing:0.02em;">${escapeHtml(BRAND.tagline)}</div>
+                <td style="padding:0 0 20px;text-align:center;font-family:Georgia,'Times New Roman',serif;">
+                  ${renderLeafMark()}
+                  <div style="font-size:20px;line-height:1.2;font-weight:700;letter-spacing:0.06em;color:${COLORS.text};text-transform:uppercase;">${escapeHtml(BRAND.name)}</div>
+                  <div style="margin-top:6px;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.4;color:${COLORS.gold};letter-spacing:0.14em;text-transform:uppercase;">${escapeHtml(BRAND.tagline)}</div>
                 </td>
               </tr>
               <tr>
-                <td style="border-top:1px solid ${COLORS.divider};font-size:0;line-height:0;">&nbsp;</td>
-              </tr>
-              <tr>
-                <td style="padding:20px 0 0;">
-                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.card};border:1px solid ${COLORS.divider};border-radius:24px;overflow:hidden;">
+                <td>
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.card};border:1px solid ${COLORS.divider};border-radius:18px;overflow:hidden;">
                     <tr>
-                      <td style="padding:40px 40px 32px;font-family:Arial,Helvetica,sans-serif;color:${COLORS.text};">
-                        <div style="font-size:14px;line-height:1.4;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.12em;">Aromatic Solutions</div>
-                        <h1 style="margin:10px 0 0;font-size:32px;line-height:1.2;font-weight:700;letter-spacing:-0.02em;color:${COLORS.text};">${escapeHtml(title)}</h1>
-                        <p style="margin:18px 0 0;font-size:16px;line-height:1.75;color:${COLORS.text};">Hello ${escapeHtml(recipient)},</p>
-                        ${intro ? `<p style="margin:16px 0 0;font-size:16px;line-height:1.75;color:${COLORS.text};">${escapeHtml(intro)}</p>` : ''}
+                      <td style="height:5px;line-height:5px;font-size:0;background:linear-gradient(90deg, ${COLORS.accent} 0%, ${COLORS.gold} 100%);">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:40px 40px 36px;font-family:Arial,Helvetica,sans-serif;color:${COLORS.text};">
+                        <div style="font-size:12px;line-height:1.4;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.14em;">${escapeHtml(eyebrow)}</div>
+                        <h1 style="margin:12px 0 0;font-family:Georgia,'Times New Roman',serif;font-size:30px;line-height:1.25;font-weight:700;letter-spacing:-0.01em;color:${COLORS.text};">${escapeHtml(title)}</h1>
+                        <p style="margin:18px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">Hello ${escapeHtml(recipient)},</p>
+                        ${intro ? `<p style="margin:14px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">${escapeHtml(intro)}</p>` : ''}
+                        ${categoryChips ? renderCategoryChips(BRAND.categories) : ''}
                         ${bodyHtml}
                         ${sections
                           .map(
                             (section) => `
-                              <div style="margin-top:28px;">
-                                <div style="font-size:22px;line-height:1.3;font-weight:600;color:${COLORS.text};">${escapeHtml(section.heading)}</div>
-                                ${section.copy ? `<p style="margin:12px 0 0;font-size:16px;line-height:1.75;color:${COLORS.text};">${escapeHtml(section.copy)}</p>` : ''}
+                              <div style="margin-top:30px;padding-top:26px;border-top:1px solid ${COLORS.divider};">
+                                <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;line-height:1.3;font-weight:700;color:${COLORS.text};">${escapeHtml(section.heading)}</div>
+                                ${section.copy ? `<p style="margin:10px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">${escapeHtml(section.copy)}</p>` : ''}
                                 ${section.bullets ? renderBulletList(section.bullets) : ''}
                                 ${section.detailRows ? renderDetailTable(section.detailRows) : ''}
                               </div>
@@ -182,8 +225,8 @@ function buildEmailShell({
                           )
                           .join('')}
                         ${button ? renderButton(button) : ''}
-                        ${closing ? `<p style="margin:28px 0 0;font-size:16px;line-height:1.75;color:${COLORS.text};">${escapeHtml(closing)}</p>` : ''}
-                        ${footerNote ? `<p style="margin:18px 0 0;font-size:13px;line-height:1.7;color:${COLORS.muted};">${escapeHtml(footerNote)}</p>` : ''}
+                        ${closing ? `<p style="margin:30px 0 0;font-size:15px;line-height:1.75;color:${COLORS.text};">${escapeHtml(closing)}</p>` : ''}
+                        ${footerNote ? `<p style="margin:18px 0 0;font-size:12.5px;line-height:1.7;color:${COLORS.muted};">${escapeHtml(footerNote)}</p>` : ''}
                       </td>
                     </tr>
                   </table>
@@ -191,13 +234,13 @@ function buildEmailShell({
               </tr>
               <tr>
                 <td style="padding:18px 0 0;">
-                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.footer};border:1px solid ${COLORS.divider};border-radius:20px;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${COLORS.footer};border:1px solid ${COLORS.divider};border-radius:16px;">
                     <tr>
-                      <td style="padding:20px 24px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.8;color:${COLORS.muted};text-align:center;">
-                        <div style="font-weight:600;color:${COLORS.text};">${escapeHtml(BRAND.name)}</div>
-                        <div>${escapeHtml(BRAND.city)}</div>
-                        <div><a href="${escapeHtml(BRAND.website)}" style="color:${COLORS.accent};text-decoration:none;">${escapeHtml(BRAND.website)}</a></div>
-                        ${managementLinks.length ? `<div style="margin-top:8px;">${managementLinks.join(' <span style="color:${COLORS.divider};">|</span> ')}</div>` : ''}
+                      <td style="padding:22px 24px;font-family:Arial,Helvetica,sans-serif;font-size:11.5px;line-height:1.8;color:${COLORS.muted};text-align:center;">
+                        <div style="font-weight:700;color:${COLORS.text};letter-spacing:0.04em;">${escapeHtml(BRAND.name.toUpperCase())}</div>
+                        <div>${escapeHtml(BRAND.tagline)} &middot; ${escapeHtml(BRAND.city)}</div>
+                        <div style="margin-top:6px;"><a href="${escapeHtml(BRAND.website)}" style="color:${COLORS.accent};text-decoration:none;">${escapeHtml(BRAND.website.replace('https://', ''))}</a></div>
+                        ${managementLinks.length ? `<div style="margin-top:10px;">${managementLinks.join(` <span style="color:${COLORS.divider};">|</span> `)}</div>` : ''}
                       </td>
                     </tr>
                   </table>

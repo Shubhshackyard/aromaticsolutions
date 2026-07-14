@@ -77,7 +77,7 @@ export default function Navbar() {
               ? 'border border-forest-200/60 group-hover:border-forest-200'
               : 'border border-white/15 group-hover:border-white/25'
           }`}>
-            <img src="/logo.png" alt="Aromatic Solutions" className="h-full w-full object-fill p-0.5" />
+            <img src="/logo.webp" alt="Aromatic Solutions" className="h-full w-full object-fill p-0.5" />
           </div>
           <div className="flex min-w-0 flex-col justify-center leading-[0.92] md:leading-[0.95] pt-0.5">
             <span className={`block truncate font-serif font-bold text-[1rem] sm:text-[1.15rem] md:text-[1.7rem] tracking-[-0.04em] transition-colors duration-300 ${
@@ -222,7 +222,7 @@ export default function Navbar() {
                       ? 'border-forest-200/50 dark:border-forest-700/60'
                       : 'border-white/12'
                   }`}>
-                    <img src="/logo.png" alt="Aromatic Solutions" className="h-full w-full object-contain p-0.5" />
+                    <img src="/logo.webp" alt="Aromatic Solutions" className="h-full w-full object-contain p-0.5" />
                   </div>
                   <div className="min-w-0">
                     <p className={`font-serif text-lg font-semibold tracking-tight ${scrolled ? 'text-slate-900 dark:text-white' : 'text-white'}`}>Explore</p>

@@ -3,7 +3,7 @@ const BRAND = {
   tagline: "Nature's Purest Essences",
   website: 'https://www.aromaticsolutions.co.in',
   journal: 'https://www.aromaticsolutions.co.in/blog',
-  logo: 'https://www.aromaticsolutions.co.in/logo.png',
+  logo: 'https://www.aromaticsolutions.co.in/logo-ex.png',
   supportEmail: 'newsletter@aromaticsolutions.co.in',
   city: 'Kannauj, India',
   categories: ['Essential Oils', 'Carrier Oils', 'Herbal Extracts', 'Industrial Fragrances'],

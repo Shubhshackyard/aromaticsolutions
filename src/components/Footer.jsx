@@ -32,7 +32,7 @@ export default function Footer() {
           <div>
             <button type="button" onClick={() => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} className="flex items-center gap-2 mb-4 text-left">
               <div className="w-12 h-12 overflow-hidden rounded-full border border-white/10 bg-transparent p-0.5">
-                <img src="/logo.png" alt="Aromatic Solutions" className="h-full w-full object-fill" />
+                <img src="/logo-ex.webp" alt="Aromatic Solutions" className="h-full w-full object-fill" />
               </div>
               <div className="leading-none">
                 <span className="block font-serif font-bold text-white text-base">Aromatic</span>
